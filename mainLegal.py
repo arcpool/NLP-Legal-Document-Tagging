@@ -124,20 +124,37 @@ testPath = '/Users/arya/Desktop/DocumentTagging/testData/Test_docs/'
 os.chdir(testPath)
 testFiles =  os.listdir()
 
-test = [open(testFiles[1]).read()] #for one test file
-postModelTest = [nlp(text) for text in test] #applying the model to each doc
-finalTags = [] #stores the final tags, just one file for demo in this case
-for i in range(len(postModelTest)):
-    if(len(postModelTest[i].ents) > 1): #to handle multiple labels for one text doc
-        for j in range(len(postModelTest[i].ents)):
-            finalTags.append((postModelTest[i].ents[j].text, postModelTest[i].ents[j].label_))
-    else:
-        finalTags.append((postModelTest[i].ents[0].text, postModelTest[i].ents[0].label_))
+def sortTestByCase(x):
+    return(x[-17:])
+
+testFiles = sorted(testFiles, key = sortTestByCase) #sorted test file names of train tags by case number
+testFiles.pop(0)
+
+testDocs = []
+for i in range(0,len(testFiles)):
+    testDocs.append(open(testFiles[i], encoding = "latin-1").read())
+
+separateTags = []
+def tagSeparator(tup):
+    separateTags.append(tup)
+    
+finalTags = [] #to store the final tags generated for the test files
+
+for i in range(0,len(testDocs)):
+    postModelTest = [nlp(text) for text in [testDocs[i]]]
+    for j in range(0,len(postModelTest)):
+        separateTags = []
+        for k in range(len(postModelTest[j].ents)):
+            tagSeparator(postModelTest[j].ents[k].label_)
+        finalTags.append(separateTags)
+
+import pandas as pd
+df = pd.DataFrame(finalTags)
+os.chdir('/Users/arya/Desktop/DocumentTagging/')
+df.to_csv('outputTags.csv',header=False,index=False)
         
 end = time.time()
 print(end - start)
-#can also make this for multiple files in the testFiles. For demo shown only for one file at a time.
-
 
 #training the model
 #import random
