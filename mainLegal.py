@@ -145,7 +145,7 @@ for i in range(0,len(testDocs)):
     for j in range(0,len(postModelTest)):
         separateTags = []
         for k in range(len(postModelTest[j].ents)):
-            tagSeparator(postModelTest[j].ents[k].label_)
+            tagSeparator((postModelTest[j].ents[k].text,postModelTest[j].ents[k].label_))
         finalTags.append(separateTags)
 
 #exporting tags as a csv file
