@@ -148,6 +148,7 @@ for i in range(0,len(testDocs)):
             tagSeparator(postModelTest[j].ents[k].label_)
         finalTags.append(separateTags)
 
+#exporting tags as a csv file
 import pandas as pd
 df = pd.DataFrame(finalTags)
 os.chdir('/Users/arya/Desktop/DocumentTagging/')
